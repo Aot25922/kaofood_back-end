@@ -1,13 +1,13 @@
-package backend.kaofood.kaofoodproject;
+package kao.backend.spring;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class KaoFoodProjectApplication {
+public class KaoFoodSpringApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(KaoFoodProjectApplication.class, args);
+        SpringApplication.run(KaoFoodSpringApplication.class, args);
     }
 
 }
