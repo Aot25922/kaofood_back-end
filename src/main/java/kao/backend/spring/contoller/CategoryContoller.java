@@ -1,7 +1,7 @@
 package kao.backend.spring.contoller;
 
-import kao.backend.spring.model.TypeEntity;
-import kao.backend.spring.repository.TypeRepository;
+import kao.backend.spring.model.CategoryEntity;
+import kao.backend.spring.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +12,10 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/type")
-public class TypeContoller {
+@RequestMapping("/category")
+public class CategoryContoller {
     @Autowired
-    private TypeRepository typeRepository;
+    private CategoryRepository categoryRepository;
     @GetMapping("")
-    private List<TypeEntity> showAllType() { return typeRepository.findAll(); }
+    private List<CategoryEntity> showAllType() { return categoryRepository.findAll(); }
 }

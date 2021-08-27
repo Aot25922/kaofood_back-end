@@ -3,30 +3,30 @@ package kao.backend.spring.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "type")
-public class TypeEntity {
+@Table(name = "category")
+public class CategoryEntity {
     @Id
-    private int typeId;
-    private String typeName;
+    private int cateId;
+    private String cateName;
     private String image;
     private String description;
 
-    @Column(name = "typeId")
-    public int getTypeId() {
-        return typeId;
+    @Column(name = "cateId")
+    public int getCateId() {
+        return cateId;
     }
 
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
+    public void setCateId(int cateId) {
+        this.cateId = cateId;
     }
 
-    @Column(name = "typeName")
-    public String getTypeName() {
-        return typeName;
+    @Column(name = "cateName")
+    public String getCateName() {
+        return cateName;
     }
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
+    public void setCateName(String cateName) {
+        this.cateName = cateName;
     }
 
     @Column(name = "image")
