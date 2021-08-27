@@ -3,8 +3,10 @@ package kao.backend.spring.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "userDetail", schema = "dbo", catalog = "kaofood")
+@Table(name = "userdetail", schema = "dbo", catalog = "kaofood")
 public class UserDetailEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String userDetailId;
     private String fname;
     private String lname;
