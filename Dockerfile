@@ -7,5 +7,5 @@ RUN mvn package
 FROM openjdk:11.0.12-jre-slim
 ARG JAR_File=/app/target/*.jar
 COPY --from=build ${JAR_File} app.jar
-EXPOSE 8088
+EXPOSE 8080
 ENTRYPOINT java -jar app.jar
