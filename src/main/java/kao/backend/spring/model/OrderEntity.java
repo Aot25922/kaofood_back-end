@@ -1,6 +1,8 @@
 package kao.backend.spring.model;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "order", schema = "kaofood", catalog = "")
@@ -9,11 +11,14 @@ public class OrderEntity {
     private int orderId;
     private float totalPrice;
     @ManyToOne
-    @JoinColumn(name = "menuid")
-    private MenuEntity menuid;
-    @ManyToOne
-    @JoinColumn(name = "userid")
-    private UserEntity userid;
+    @JoinColumn(name = "statusId")
+    private StatusEntity statusId;
+    @ManyToMany
+    @JoinTable(
+            name = "orderDetail",
+            joinColumns = @JoinColumn(name = "orderId"),
+            inverseJoinColumns = @JoinColumn(name = "menuId"))
+    private List<MenuEntity> menuList;
 
     public int getOrderId() {
         return orderId;
@@ -29,22 +34,6 @@ public class OrderEntity {
 
     public void setTotalPrice(float totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    public MenuEntity getMenuid() {
-        return menuid;
-    }
-
-    public void setMenuid(MenuEntity menuid) {
-        this.menuid = menuid;
-    }
-
-    public UserEntity getUserid() {
-        return userid;
-    }
-
-    public void setUserid(UserEntity userid) {
-        this.userid = userid;
     }
 
 //    @Override
