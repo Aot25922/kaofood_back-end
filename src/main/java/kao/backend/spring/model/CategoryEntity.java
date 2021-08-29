@@ -11,8 +11,6 @@ public class CategoryEntity {
     private String image;
     private String description;
 
-    @Id
-    @Column(name = "cateId")
     public int getCateId() {
         return cateId;
     }
@@ -21,8 +19,6 @@ public class CategoryEntity {
         this.cateId = cateId;
     }
 
-    @Basic
-    @Column(name = "cateName")
     public String getCateName() {
         return cateName;
     }
@@ -31,8 +27,6 @@ public class CategoryEntity {
         this.cateName = cateName;
     }
 
-    @Basic
-    @Column(name = "image")
     public String getImage() {
         return image;
     }
@@ -41,8 +35,6 @@ public class CategoryEntity {
         this.image = image;
     }
 
-    @Basic
-    @Column(name = "description")
     public String getDescription() {
         return description;
     }
