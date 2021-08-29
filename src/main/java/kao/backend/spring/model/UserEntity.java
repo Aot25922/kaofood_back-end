@@ -6,6 +6,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "user", schema = "kaofood", catalog = "")
 public class UserEntity implements Serializable {
+    @Id
     private int userId;
     private String email;
     private String password;
@@ -15,8 +16,6 @@ public class UserEntity implements Serializable {
     private String address;
     private String role;
 
-    @Id
-    @Column(name = "userId")
     public int getUserId() {
         return userId;
     }
@@ -25,9 +24,6 @@ public class UserEntity implements Serializable {
         this.userId = userId;
     }
 
-
-    @Basic
-    @Column(name = "email")
     public String getEmail() {
         return email;
     }
@@ -36,8 +32,6 @@ public class UserEntity implements Serializable {
         this.email = email;
     }
 
-    @Basic
-    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -46,8 +40,6 @@ public class UserEntity implements Serializable {
         this.password = password;
     }
 
-    @Basic
-    @Column(name = "fname")
     public String getFname() {
         return fname;
     }
@@ -56,8 +48,6 @@ public class UserEntity implements Serializable {
         this.fname = fname;
     }
 
-    @Basic
-    @Column(name = "lname")
     public String getLname() {
         return lname;
     }
@@ -66,8 +56,6 @@ public class UserEntity implements Serializable {
         this.lname = lname;
     }
 
-    @Basic
-    @Column(name = "phone")
     public String getPhone() {
         return phone;
     }
@@ -76,8 +64,6 @@ public class UserEntity implements Serializable {
         this.phone = phone;
     }
 
-    @Basic
-    @Column(name = "address")
     public String getAddress() {
         return address;
     }
@@ -86,8 +72,6 @@ public class UserEntity implements Serializable {
         this.address = address;
     }
 
-    @Basic
-    @Column(name = "role")
     public String getRole() {
         return role;
     }
