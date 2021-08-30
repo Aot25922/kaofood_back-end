@@ -15,12 +15,8 @@ public class OrderEntity {
     @ManyToOne
     @JoinColumn(name = "statusId")
     private StatusEntity status;
-    @ManyToMany
-    @JoinTable(
-            name = "orderDetail",
-            joinColumns = @JoinColumn(name = "orderId"),
-            inverseJoinColumns = @JoinColumn(name = "menuId"))
-    private List<MenuEntity> menuList;
+    @OneToMany(mappedBy = "order")
+    private List<OrderDetailEntity> orderDetail;
 
     public int getId() {
         return id;
@@ -54,12 +50,12 @@ public class OrderEntity {
         this.status = status;
     }
 
-    public List<MenuEntity> getMenuList() {
-        return menuList;
+    public List<OrderDetailEntity> getOrderDetail() {
+        return orderDetail;
     }
 
-    public void setMenuList(List<MenuEntity> menuList) {
-        this.menuList = menuList;
+    public void setOrderDetail(List<OrderDetailEntity> orderDetail) {
+        this.orderDetail = orderDetail;
     }
 
     //    @Override

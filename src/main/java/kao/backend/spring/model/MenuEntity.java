@@ -1,6 +1,7 @@
 package kao.backend.spring.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "menu", schema = "kaofood", catalog = "")
@@ -14,6 +15,8 @@ public class MenuEntity {
     @ManyToOne
     @JoinColumn(name = "cateId")
     private CategoryEntity category;
+    @OneToMany(mappedBy = "menu")
+    private List<OrderDetailEntity> orderDetailList;
 
     public int getId() {
         return id;
@@ -63,7 +66,15 @@ public class MenuEntity {
         this.category = categoryId;
     }
 
-//    @Override
+    public List<OrderDetailEntity> getOrderDetailList() {
+        return orderDetailList;
+    }
+
+    public void setOrderDetailList(List<OrderDetailEntity> orderDetailList) {
+        this.orderDetailList = orderDetailList;
+    }
+
+    //    @Override
 //    public boolean equals(Object o) {
 //        if (this == o) return true;
 //        if (o == null || getClass() != o.getClass()) return false;
