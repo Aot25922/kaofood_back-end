@@ -2,12 +2,13 @@ package kao.backend.spring.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "user", schema = "kaofood", catalog = "")
 public class UserEntity implements Serializable {
     @Id
-    private int userId;
+    private int id;
     private String email;
     private String password;
     private String fname;
@@ -15,13 +16,15 @@ public class UserEntity implements Serializable {
     private String phone;
     private String address;
     private String role;
+    @OneToMany(mappedBy = "user")
+    private List<OrderEntity> orderList;
 
-    public int getUserId() {
-        return userId;
+    public int getId() {
+        return id;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setId(int userId) {
+        this.id = userId;
     }
 
     public String getEmail() {
@@ -80,4 +83,11 @@ public class UserEntity implements Serializable {
         this.role = role;
     }
 
+    public List<OrderEntity> getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(List<OrderEntity> orderList) {
+        this.orderList = orderList;
+    }
 }

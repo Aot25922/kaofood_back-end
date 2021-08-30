@@ -1,31 +1,37 @@
 package kao.backend.spring.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "menu", schema = "kaofood", catalog = "")
 public class MenuEntity {
     @Id
-    private int menuId;
-    private String menuName;
+    private int id;
+    private String name;
     private float price;
     private String description;
     private String image;
+    @ManyToOne
+    @JoinColumn(name = "cateId")
+    private CategoryEntity category;
+    @OneToMany(mappedBy = "menu")
+    private List<OrderDetailEntity> orderDetailList;
 
-    public int getMenuId() {
-        return menuId;
+    public int getId() {
+        return id;
     }
 
-    public void setMenuId(int menuId) {
-        this.menuId = menuId;
+    public void setId(int menuId) {
+        this.id = menuId;
     }
 
-    public String getMenuName() {
-        return menuName;
+    public String getName() {
+        return name;
     }
 
-    public void setMenuName(String menuName) {
-        this.menuName = menuName;
+    public void setName(String menuName) {
+        this.name = menuName;
     }
 
     public float getPrice() {
@@ -52,7 +58,23 @@ public class MenuEntity {
         this.image = image;
     }
 
-//    @Override
+    public CategoryEntity getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryEntity categoryId) {
+        this.category = categoryId;
+    }
+
+    public List<OrderDetailEntity> getOrderDetailList() {
+        return orderDetailList;
+    }
+
+    public void setOrderDetailList(List<OrderDetailEntity> orderDetailList) {
+        this.orderDetailList = orderDetailList;
+    }
+
+    //    @Override
 //    public boolean equals(Object o) {
 //        if (this == o) return true;
 //        if (o == null || getClass() != o.getClass()) return false;

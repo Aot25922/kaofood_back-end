@@ -1,26 +1,29 @@
 package kao.backend.spring.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "order", schema = "kaofood", catalog = "")
 public class OrderEntity {
     @Id
-    private int orderId;
+    private int id;
     private float totalPrice;
     @ManyToOne
-    @JoinColumn(name = "menuid")
-    private MenuEntity menuid;
+    @JoinColumn(name = "userId" ,nullable = false)
+    private UserEntity user;
     @ManyToOne
-    @JoinColumn(name = "userid")
-    private UserEntity userid;
+    @JoinColumn(name = "statusId" ,nullable = false)
+    private StatusEntity status;
+    @OneToMany(mappedBy = "order")
+    private List<OrderDetailEntity> orderDetail;
 
-    public int getOrderId() {
-        return orderId;
+    public int getId() {
+        return id;
     }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    public void setId(int orderId) {
+        this.id = orderId;
     }
 
     public float getTotalPrice() {
@@ -31,23 +34,31 @@ public class OrderEntity {
         this.totalPrice = totalPrice;
     }
 
-    public MenuEntity getMenuid() {
-        return menuid;
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setMenuid(MenuEntity menuid) {
-        this.menuid = menuid;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
-    public UserEntity getUserid() {
-        return userid;
+    public StatusEntity getStatus() {
+        return status;
     }
 
-    public void setUserid(UserEntity userid) {
-        this.userid = userid;
+    public void setStatus(StatusEntity status) {
+        this.status = status;
     }
 
-//    @Override
+    public List<OrderDetailEntity> getOrderDetail() {
+        return orderDetail;
+    }
+
+    public void setOrderDetail(List<OrderDetailEntity> orderDetail) {
+        this.orderDetail = orderDetail;
+    }
+
+    //    @Override
 //    public boolean equals(Object o) {
 //        if (this == o) return true;
 //        if (o == null || getClass() != o.getClass()) return false;
