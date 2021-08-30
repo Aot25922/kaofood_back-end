@@ -6,26 +6,29 @@ import javax.persistence.*;
 @Table(name = "menu", schema = "kaofood", catalog = "")
 public class MenuEntity {
     @Id
-    private int menuId;
-    private String menuName;
+    private int id;
+    private String name;
     private float price;
     private String description;
     private String image;
+    @ManyToOne
+    @JoinColumn(name = "cateId")
+    private CategoryEntity category;
 
-    public int getMenuId() {
-        return menuId;
+    public int getId() {
+        return id;
     }
 
-    public void setMenuId(int menuId) {
-        this.menuId = menuId;
+    public void setId(int menuId) {
+        this.id = menuId;
     }
 
-    public String getMenuName() {
-        return menuName;
+    public String getName() {
+        return name;
     }
 
-    public void setMenuName(String menuName) {
-        this.menuName = menuName;
+    public void setName(String menuName) {
+        this.name = menuName;
     }
 
     public float getPrice() {
@@ -50,6 +53,14 @@ public class MenuEntity {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public CategoryEntity getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryEntity categoryId) {
+        this.category = categoryId;
     }
 
 //    @Override

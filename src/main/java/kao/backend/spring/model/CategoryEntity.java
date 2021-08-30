@@ -1,30 +1,33 @@
 package kao.backend.spring.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "category", schema = "kaofood", catalog = "")
 public class CategoryEntity {
     @Id
-    private int cateId;
-    private String cateName;
+    private int id;
+    private String name;
     private String image;
     private String description;
+    @OneToMany(mappedBy = "category")
+    private List<MenuEntity> menuList;
 
-    public int getCateId() {
-        return cateId;
+    public int getId() {
+        return id;
     }
 
-    public void setCateId(int cateId) {
-        this.cateId = cateId;
+    public void setId(int cateId) {
+        this.id = cateId;
     }
 
-    public String getCateName() {
-        return cateName;
+    public String getName() {
+        return name;
     }
 
-    public void setCateName(String cateName) {
-        this.cateName = cateName;
+    public void setName(String cateName) {
+        this.name = cateName;
     }
 
     public String getImage() {
@@ -43,6 +46,14 @@ public class CategoryEntity {
         this.description = description;
     }
 
+    public List<MenuEntity> getMenuList() {
+        return menuList;
+    }
+
+    public void setMenuList(List<MenuEntity> menuList) {
+        this.menuList = menuList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -50,8 +61,8 @@ public class CategoryEntity {
 
         CategoryEntity that = (CategoryEntity) o;
 
-        if (cateId != that.cateId) return false;
-        if (cateName != null ? !cateName.equals(that.cateName) : that.cateName != null) return false;
+        if (id != that.id) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (image != null ? !image.equals(that.image) : that.image != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
 
@@ -60,8 +71,8 @@ public class CategoryEntity {
 
     @Override
     public int hashCode() {
-        int result = cateId;
-        result = 31 * result + (cateName != null ? cateName.hashCode() : 0);
+        int result = id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (image != null ? image.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
 
-    List<MenuEntity> findMenuEntityByMenuName(String menuName);
+//    List<MenuEntity> findMenuEntityByMenuName(String menuName);
 }

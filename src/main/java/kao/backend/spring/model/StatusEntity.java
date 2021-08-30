@@ -6,23 +6,23 @@ import javax.persistence.*;
 @Table(name = "status", schema = "kaofood", catalog = "")
 public class StatusEntity {
     @Id
-    private int statusId;
-    private String statusName;
+    private int id;
+    private String name;
 
-    public int getStatusId() {
-        return statusId;
+    public int getId() {
+        return id;
     }
 
-    public void setStatusId(int statusId) {
-        this.statusId = statusId;
+    public void setId(int statusId) {
+        this.id = statusId;
     }
 
-    public String getStatusName() {
-        return statusName;
+    public String getName() {
+        return name;
     }
 
-    public void setStatusName(String statusName) {
-        this.statusName = statusName;
+    public void setName(String statusName) {
+        this.name = statusName;
     }
 
     @Override
@@ -32,16 +32,16 @@ public class StatusEntity {
 
         StatusEntity that = (StatusEntity) o;
 
-        if (statusId != that.statusId) return false;
-        if (statusName != null ? !statusName.equals(that.statusName) : that.statusName != null) return false;
+        if (id != that.id) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = statusId;
-        result = 31 * result + (statusName != null ? statusName.hashCode() : 0);
+        int result = id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
 }
