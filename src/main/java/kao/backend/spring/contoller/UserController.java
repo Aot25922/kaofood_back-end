@@ -19,15 +19,12 @@ public class UserController {
     @Autowired
     private ObjectMapper objectMapper = new ObjectMapper();
     @GetMapping("")
-    public  List<UserEntity> getAll(HttpSession session){
-        List<UserEntity> test = (List<UserEntity>) session.getAttribute("account");
-        return test;
+    public  List<UserEntity> getAll(){
+        return userRepository.findAll();
     }
     @GetMapping("/{email}/{password}")
     public List<UserEntity> login(@PathVariable String email,@PathVariable String password,HttpServletRequest request){
         if(userRepository.findAllByEmailAndPassword(email, password).isEmpty()==false){
-           List<UserEntity> test=userRepository.findAllByEmailAndPassword(email, password);
-           request.getSession().setAttribute("account",test);
            return userRepository.findAllByEmailAndPassword(email, password);
        }
        else{
