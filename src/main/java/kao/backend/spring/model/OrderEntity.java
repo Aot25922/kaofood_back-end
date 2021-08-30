@@ -10,10 +10,10 @@ public class OrderEntity {
     private int id;
     private float totalPrice;
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "userId" ,nullable = false)
     private UserEntity user;
     @ManyToOne
-    @JoinColumn(name = "statusId")
+    @JoinColumn(name = "statusId" ,nullable = false)
     private StatusEntity status;
     @OneToMany(mappedBy = "order")
     private List<OrderDetailEntity> orderDetail;

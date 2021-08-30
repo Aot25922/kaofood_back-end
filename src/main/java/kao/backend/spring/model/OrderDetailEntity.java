@@ -8,10 +8,10 @@ public class OrderDetailEntity {
     @Id
     private int id;
     @ManyToOne
-    @JoinColumn(name = "orderId")
+    @JoinColumn(name = "orderId" ,nullable = false)
     private OrderEntity order;
     @ManyToOne
-    @JoinColumn(name = "menuId")
+    @JoinColumn(name = "menuId" ,nullable = false)
     private MenuEntity menu;
     private int count;
 
