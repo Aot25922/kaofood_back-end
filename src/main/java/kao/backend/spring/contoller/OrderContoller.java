@@ -2,7 +2,6 @@ package kao.backend.spring.contoller;
 
 import kao.backend.spring.model.OrderEntity;
 import kao.backend.spring.repository.OrderRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
