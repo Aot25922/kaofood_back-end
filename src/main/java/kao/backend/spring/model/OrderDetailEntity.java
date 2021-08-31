@@ -8,8 +8,8 @@ public class OrderDetailEntity {
     @Id
     private int id;
     @ManyToOne
-    @JoinColumn(name = "orderId" ,nullable = false)
-    private OrderEntity order;
+    @JoinColumn(name = "ordersId" ,nullable = false)
+    private OrderEntity orders;
     @ManyToOne
     @JoinColumn(name = "menuId" ,nullable = false)
     private MenuEntity menu;
@@ -31,12 +31,12 @@ public class OrderDetailEntity {
         this.count = count;
     }
 
-    public OrderEntity getOrder() {
-        return order;
-    }
+//    public OrderEntity getOrders() {
+//        return orders;
+//    }
 
-    public void setOrder(OrderEntity order) {
-        this.order = order;
+    public void setOrders(OrderEntity order) {
+        this.orders = order;
     }
 
     public MenuEntity getMenu() {
@@ -47,23 +47,5 @@ public class OrderDetailEntity {
         this.menu = menu;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        OrderDetailEntity that = (OrderDetailEntity) o;
-
-        if (id != that.id) return false;
-        if (count != that.count) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + count;
-        return result;
-    }
 }

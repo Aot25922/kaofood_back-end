@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "order", schema = "kaofood", catalog = "")
+@Table(name = "orders", schema = "kaofood", catalog = "")
 public class OrderEntity {
     @Id
     private int id;
@@ -15,7 +15,7 @@ public class OrderEntity {
     @ManyToOne
     @JoinColumn(name = "statusId" ,nullable = false)
     private StatusEntity status;
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "orders")
     private List<OrderDetailEntity> orderDetail;
 
     public int getId() {
@@ -34,9 +34,9 @@ public class OrderEntity {
         this.totalPrice = totalPrice;
     }
 
-    public UserEntity getUser() {
-        return user;
-    }
+//    public UserEntity getUser() {
+//        return user;
+//    }
 
     public void setUser(UserEntity user) {
         this.user = user;
@@ -50,9 +50,9 @@ public class OrderEntity {
         this.status = status;
     }
 
-    public List<OrderDetailEntity> getOrderDetail() {
-        return orderDetail;
-    }
+//    public List<OrderDetailEntity> getOrderDetail() {
+//        return orderDetail;
+//    }
 
     public void setOrderDetail(List<OrderDetailEntity> orderDetail) {
         this.orderDetail = orderDetail;

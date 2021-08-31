@@ -46,9 +46,9 @@ public class CategoryEntity {
         this.description = description;
     }
 
-    public List<MenuEntity> getMenuList() {
-        return menuList;
-    }
+//    public List<MenuEntity> getMenuList() {
+//        return menuList;
+//    }
 
     public void setMenuList(List<MenuEntity> menuList) {
         this.menuList = menuList;

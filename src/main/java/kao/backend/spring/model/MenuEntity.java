@@ -66,9 +66,9 @@ public class MenuEntity {
         this.category = categoryId;
     }
 
-    public List<OrderDetailEntity> getOrderDetailList() {
-        return orderDetailList;
-    }
+//    public List<OrderDetailEntity> getOrderDetailList() {
+//        return orderDetailList;
+//    }
 
     public void setOrderDetailList(List<OrderDetailEntity> orderDetailList) {
         this.orderDetailList = orderDetailList;

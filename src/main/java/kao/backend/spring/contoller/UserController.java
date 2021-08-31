@@ -23,13 +23,8 @@ public class UserController {
         return userRepository.findAll();
     }
     @GetMapping("/{email}/{password}")
-    public List<UserEntity> login(@PathVariable String email,@PathVariable String password,HttpServletRequest request){
-        if(userRepository.findAllByEmailAndPassword(email, password).isEmpty()==false){
-           return userRepository.findAllByEmailAndPassword(email, password);
-       }
-       else{
-           return null;
-       }
+    public UserEntity login(@PathVariable String email,@PathVariable String password){
+           return userRepository.findByEmailAndPassword(email, password);
     }
 
 }
