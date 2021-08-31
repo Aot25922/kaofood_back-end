@@ -1,13 +1,25 @@
 package kao.backend.spring.contoller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kao.backend.spring.model.MenuEntity;
 import kao.backend.spring.repository.MenuRepository;
-
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @CrossOrigin
@@ -16,8 +28,13 @@ import java.util.List;
 public class MenuContoller {
     @Autowired
     private MenuRepository menuRepository;
+    @Autowired
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     @GetMapping("")
-    private List<MenuEntity> showAll() {return menuRepository.findAll();}
+    private List<MenuEntity> showAll() {
+        return menuRepository.findAll();
+    }
 
 //    Add new Menu and picture
 //    @PostMapping("/add")
