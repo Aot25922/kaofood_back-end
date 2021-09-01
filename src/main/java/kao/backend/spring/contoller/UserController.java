@@ -26,7 +26,7 @@ public class UserController {
 
     @GetMapping("/login")
     public UserEntity login(@RequestParam String email,@RequestParam String password){
-           return userRepository.findByEmailAndPassword(email, password);
+        return userRepository.findByEmailAndPassword(email, password);
     }
 
 }
