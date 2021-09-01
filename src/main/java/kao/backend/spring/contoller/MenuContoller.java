@@ -32,8 +32,19 @@ public class MenuContoller {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @GetMapping("")
-    private List<MenuEntity> showAll() {
+    private List<MenuEntity> getAll() {
         return menuRepository.findAll();
+    }
+
+    @GetMapping("/picture/{image}")
+    public void getImageAsByteArray(HttpServletResponse response, @PathVariable String image) throws IOException {
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        try(FileInputStream in = new FileInputStream("./storage/menu/image/"+image);
+            OutputStream out = response.getOutputStream()) {
+            IOUtils.copy(in, out);
+        }catch (IOException ioe){
+            System.out.println(ioe.getMessage());
+        }
     }
 
 //    Add new Menu and picture
@@ -103,15 +114,4 @@ public class MenuContoller {
 //        }
 //    }
 //
-//    @GetMapping("/picture/{image}")
-//    public void getImageAsByteArray(HttpServletResponse response, @PathVariable String image) throws IOException {
-//        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-//        try(FileInputStream in = new FileInputStream("./storage/image/"+image);
-//            OutputStream out = response.getOutputStream()) {
-//            IOUtils.copy(in, out);
-//        }catch (IOException ioe){
-//            System.out.println(ioe.getMessage());
-//        }
-//
-//    }
 }

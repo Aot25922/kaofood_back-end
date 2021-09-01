@@ -32,5 +32,6 @@ jobs:
           script: |
             cd kaofood/
             git pull
-            docker pull ghcr.io/int222-31-33-43/kaofood_back-end
+            docker-compose pull
             docker-compose up -d
+            docker image prune -af
