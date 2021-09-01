@@ -36,7 +36,7 @@ public class MenuContoller {
         return menuRepository.findAll();
     }
 
-    @GetMapping("/picture/{image}")
+    @GetMapping("/image/{image}")
     public void getImageAsByteArray(HttpServletResponse response, @PathVariable String image) throws IOException {
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         try(FileInputStream in = new FileInputStream("./storage/menu/image/"+image);
