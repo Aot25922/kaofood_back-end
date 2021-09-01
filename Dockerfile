@@ -5,7 +5,9 @@ COPY /src ./src
 RUN mvn package
 
 FROM openjdk:11.0.12-jre-slim
+WORKDIR /app
 ARG JAR_File=/app/target/*.jar
 COPY --from=build ${JAR_File} app.jar
+COPY /storage ./storage
 EXPOSE 8080
 ENTRYPOINT java -jar app.jar

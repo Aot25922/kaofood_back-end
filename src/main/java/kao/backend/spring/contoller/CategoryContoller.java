@@ -16,6 +16,7 @@ import java.util.List;
 public class CategoryContoller {
     @Autowired
     private CategoryRepository categoryRepository;
+
     @GetMapping("")
-    private List<CategoryEntity> showAllType() { return categoryRepository.findAll(); }
+    private List<CategoryEntity> getAll() { return categoryRepository.findAll(); }
 }
