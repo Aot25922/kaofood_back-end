@@ -18,12 +18,14 @@ public class UserController {
     UserRepository userRepository;
     @Autowired
     private ObjectMapper objectMapper = new ObjectMapper();
+
     @GetMapping("")
     public  List<UserEntity> getAll(){
         return userRepository.findAll();
     }
-    @GetMapping("/{email}/{password}")
-    public UserEntity login(@PathVariable String email,@PathVariable String password){
+
+    @GetMapping("/login")
+    public UserEntity login(@RequestParam String email,@RequestParam String password){
            return userRepository.findByEmailAndPassword(email, password);
     }
 
