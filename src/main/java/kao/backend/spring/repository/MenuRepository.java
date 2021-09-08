@@ -11,5 +11,4 @@ import java.util.List;
 public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
     boolean existsByNameIsLikeIgnoreCase(@NonNull String name);
     MenuEntity findById(int id);
-
 }

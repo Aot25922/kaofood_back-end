@@ -47,5 +47,4 @@ public class UserController {
         userRepository.save(newAccount);
         return "success";
     }
-
 }
