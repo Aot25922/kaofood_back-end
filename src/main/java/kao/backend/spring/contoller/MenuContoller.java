@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -47,44 +44,102 @@ public class MenuContoller {
         }
     }
 
-//    Add new Menu and picture
-//    @PostMapping("/add")
-//    public void addMenu(@RequestParam String menu, @RequestParam MultipartFile multipartFile) {
-//        MenuEntity newMenu = null;
-//        try {
-//            newMenu = objectMapper.readValue(menu, MenuEntity.class);
-//        } catch (JsonProcessingException e) {
-//            System.out.println(e.getStackTrace());
-//        }
-//        if (menuRepository.findMenuEntityByMenuName(newMenu.getName()) != null) {
-//            return;
-//        }
-//        String type = ".png";
-//        try {
-//            String oldname = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-//            type = oldname.substring(oldname.lastIndexOf("."));
-//        } catch (Exception e) {
-//            System.out.println(e.getStackTrace());
-//        }
-//        String fileName = newMenu.getName() + type;
-//        String uploadDir = "./storage/image/";
-//        newMenu.setImage(uploadDir + fileName);
-//        Path uploadPath = Paths.get(uploadDir);
-//        if (!Files.exists(uploadPath)) {
-//            try {
-//                Files.createDirectories(uploadPath);
-//            } catch (Exception e) {
-//                System.out.println(e.getStackTrace());
-//            }
-//        }
-//        try (InputStream inputStream = multipartFile.getInputStream()) {
-//            Path filePath = uploadPath.resolve(fileName);
-//            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-//        } catch (IOException ioe) {
-//            System.out.println(ioe.getMessage());
-//        }
-//        menuRepository.save(newMenu);
-//    }
+    //Add new Menu and picture
+    @PostMapping("/add")
+    public void addMenu(@RequestParam String menu, @RequestParam MultipartFile multipartFile) {
+        MenuEntity newMenu = null;
+        try {
+            newMenu = objectMapper.readValue(menu, MenuEntity.class);
+        } catch (JsonProcessingException e) {
+            System.out.println(e.getStackTrace());
+        }
+        if (menuRepository.existsByNameIsLikeIgnoreCase(newMenu.getName())) {
+            return;
+        }
+        String type = ".png";
+        try {
+            String oldname = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            type = oldname.substring(oldname.lastIndexOf("."));
+        } catch (Exception e) {
+            System.out.println(e.getStackTrace());
+        }
+        String fileName = newMenu.getName() + type;
+        String uploadDir = "./storage/image/";
+        newMenu.setImage("/image/" + fileName);
+        Path uploadPath = Paths.get(uploadDir);
+        if (!Files.exists(uploadPath)) {
+            try {
+                Files.createDirectories(uploadPath);
+            } catch (Exception e) {
+                System.out.println(e.getStackTrace());
+            }
+        }
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ioe) {
+            System.out.println(ioe.getMessage());
+        }
+        menuRepository.save(newMenu);
+    }
+
+    //Edit Menu and Picture
+    @PostMapping("/edit")
+    public void editMenu(@RequestParam String menu, @RequestParam MultipartFile multipartFile){
+        MenuEntity editMenu = null;
+        try {
+            editMenu = objectMapper.readValue(menu, MenuEntity.class);
+        } catch (JsonProcessingException e) {
+            System.out.println(e.getStackTrace());
+        }
+        MenuEntity Menu = menuRepository.getById(editMenu.getId());
+        Menu.setName(editMenu.getName());
+        Menu.setPrice(editMenu.getPrice());
+        Menu.setDescription(editMenu.getDescription());
+        Menu.setCategory(editMenu.getCategory());
+        String type = ".png";
+        try {
+            String oldname = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            type = oldname.substring(oldname.lastIndexOf("."));
+        } catch (Exception e) {
+            System.out.println(e.getStackTrace());
+        }
+        String fileName = Menu.getName() + type;
+        String uploadDir = "./storage/image/";
+        Menu.setImage("/image/" + fileName);
+        Path uploadPath = Paths.get(uploadDir);
+        if (!Files.exists(uploadPath)) {
+            try {
+                Files.createDirectories(uploadPath);
+            } catch (Exception e) {
+                System.out.println(e.getStackTrace());
+            }
+        }
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ioe) {
+            System.out.println(ioe.getMessage());
+        }
+        menuRepository.save(Menu);
+
+    }
+
+    //Delete Menu
+    @DeleteMapping("delete/{id}")
+    public void deleteMenu(@PathVariable int id){
+      MenuEntity menu = menuRepository.findById(id);
+        File checkFile=new File(menu.getImage());
+        if(checkFile.exists()) {
+            try {
+                Path oldImgPath = Paths.get(menu.getImage());
+                Files.delete(oldImgPath);
+            } catch (IOException ioe) {
+                System.out.println(ioe.getMessage());
+            }
+        }
+        menuRepository.deleteById(id);
+    }
 //
 //    //add only picture
 //    @PutMapping("/add/picture")
