@@ -46,11 +46,11 @@ public class MenuContoller {
 
     //Add new Menu and picture
     @PostMapping("/add")
-    public void addMenu(@RequestParam String menu, @RequestParam MultipartFile multipartFile) {
+    public void addMenu(@RequestParam String menu, @RequestParam MultipartFile multipartFile) throws IOException {
         MenuEntity newMenu = null;
         try {
             newMenu = objectMapper.readValue(menu, MenuEntity.class);
-        } catch (JsonProcessingException e) {
+        }catch (JsonProcessingException e){
             System.out.println(e.getStackTrace());
         }
         if (menuRepository.existsByNameIsLikeIgnoreCase(newMenu.getName())) {
@@ -64,8 +64,8 @@ public class MenuContoller {
             System.out.println(e.getStackTrace());
         }
         String fileName = newMenu.getName() + type;
-        String uploadDir = "./storage/image/";
-        newMenu.setImage("/image/" + fileName);
+        String uploadDir = "./storage/menu/image/";
+        newMenu.setImage("/menu/image/" + fileName);
         Path uploadPath = Paths.get(uploadDir);
         if (!Files.exists(uploadPath)) {
             try {
@@ -84,8 +84,8 @@ public class MenuContoller {
     }
 
     //Edit Menu and Picture
-    @PostMapping("/edit")
-    public void editMenu(@RequestParam String menu, @RequestParam MultipartFile multipartFile){
+    @PutMapping("/edit")
+    public void editMenu(@RequestParam String menu, @RequestParam (required = false) MultipartFile multipartFile){
         MenuEntity editMenu = null;
         try {
             editMenu = objectMapper.readValue(menu, MenuEntity.class);
@@ -97,29 +97,31 @@ public class MenuContoller {
         Menu.setPrice(editMenu.getPrice());
         Menu.setDescription(editMenu.getDescription());
         Menu.setCategory(editMenu.getCategory());
-        String type = ".png";
-        try {
-            String oldname = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-            type = oldname.substring(oldname.lastIndexOf("."));
-        } catch (Exception e) {
-            System.out.println(e.getStackTrace());
-        }
-        String fileName = Menu.getName() + type;
-        String uploadDir = "./storage/image/";
-        Menu.setImage("/image/" + fileName);
-        Path uploadPath = Paths.get(uploadDir);
-        if (!Files.exists(uploadPath)) {
+        if(multipartFile!=null) {
+            String type = ".png";
             try {
-                Files.createDirectories(uploadPath);
+                String oldname = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                type = oldname.substring(oldname.lastIndexOf("."));
             } catch (Exception e) {
                 System.out.println(e.getStackTrace());
             }
-        }
-        try (InputStream inputStream = multipartFile.getInputStream()) {
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException ioe) {
-            System.out.println(ioe.getMessage());
+            String fileName = Menu.getName() + type;
+            String uploadDir = "./storage/menu/image/";
+            Menu.setImage("/menu/image/" + fileName);
+            Path uploadPath = Paths.get(uploadDir);
+            if (!Files.exists(uploadPath)) {
+                try {
+                    Files.createDirectories(uploadPath);
+                } catch (Exception e) {
+                    System.out.println(e.getStackTrace());
+                }
+            }
+            try (InputStream inputStream = multipartFile.getInputStream()) {
+                Path filePath = uploadPath.resolve(fileName);
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException ioe) {
+                System.out.println(ioe.getMessage());
+            }
         }
         menuRepository.save(Menu);
 
