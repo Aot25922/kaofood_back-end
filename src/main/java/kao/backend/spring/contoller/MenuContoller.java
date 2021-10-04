@@ -131,10 +131,10 @@ public class MenuContoller {
     @DeleteMapping("delete/{id}")
     public void deleteMenu(@PathVariable int id){
       MenuEntity menu = menuRepository.findById(id);
-        File checkFile=new File(menu.getImage());
+        File checkFile=new File("./storage"+menu.getImage());
         if(checkFile.exists()) {
             try {
-                Path oldImgPath = Paths.get(menu.getImage());
+                Path oldImgPath = Paths.get("./storage"+menu.getImage());
                 Files.delete(oldImgPath);
             } catch (IOException ioe) {
                 System.out.println(ioe.getMessage());
