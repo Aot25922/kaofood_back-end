@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    HttpSession session;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -28,23 +27,31 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public UserEntity login(@RequestParam(value = "email", required = false) String email, @RequestParam(value = "password" ,required = false) String password,HttpServletRequest request) {
+    public UserEntity login(@RequestParam(value = "email", required = false) String email, @RequestParam(value = "password" ,required = false) String password,HttpServletRequest request,HttpSession session) {
         if(email==null && password==null){
             if(session == null){
                 return null;
             }
             List<String> loginAccount = (List<String>) session.getAttribute("Account");
             System.out.println(session.getId());
+            if(loginAccount==null||loginAccount.isEmpty()){
+                return null;
+            }
             return  userRepository.findByEmailAndPassword(loginAccount.get(0), loginAccount.get(1));
         }
-        session = request.getSession();
             ArrayList<String> account = new ArrayList<>();
             account.add(email);
             account.add(password);
-            session.setAttribute("Account", account);
+            request.getSession().setAttribute("Account", account);
             System.out.println(session.getId());
             return userRepository.findByEmailAndPassword(email, password);
 
+    }
+
+    @DeleteMapping("/logout")
+    public void logout(@RequestParam(value = "email", required = false) String email, @RequestParam(value = "password" ,required = false) String password,HttpSession session ){
+        System.out.println(session.getId());
+        session.invalidate();
     }
 
     @PostMapping("/signup")
