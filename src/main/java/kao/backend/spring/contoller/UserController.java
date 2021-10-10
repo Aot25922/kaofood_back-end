@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserController {
+    HttpSession session;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -26,8 +28,23 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public UserEntity login(@RequestParam String email, @RequestParam String password) {
-        return userRepository.findByEmailAndPassword(email, password);
+    public UserEntity login(@RequestParam(value = "email", required = false) String email, @RequestParam(value = "password" ,required = false) String password,HttpServletRequest request) {
+        if(email==null && password==null){
+            if(session == null){
+                return null;
+            }
+            List<String> loginAccount = (List<String>) session.getAttribute("Account");
+            System.out.println(session.getId());
+            return  userRepository.findByEmailAndPassword(loginAccount.get(0), loginAccount.get(1));
+        }
+        session = request.getSession();
+            ArrayList<String> account = new ArrayList<>();
+            account.add(email);
+            account.add(password);
+            session.setAttribute("Account", account);
+            System.out.println(session.getId());
+            return userRepository.findByEmailAndPassword(email, password);
+
     }
 
     @PostMapping("/signup")
