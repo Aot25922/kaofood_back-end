@@ -153,7 +153,7 @@ public class MenuContoller {
     }
 
     //Delete Menu
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteMenu(@PathVariable int id, HttpSession session) {
         List<String> loginAccount = (List<String>) session.getAttribute("Account");
         UserEntity user = userRepository.findByEmailAndPassword(loginAccount.get(0), loginAccount.get(1));
