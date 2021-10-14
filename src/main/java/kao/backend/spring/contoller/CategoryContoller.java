@@ -3,6 +3,7 @@ package kao.backend.spring.contoller;
 import kao.backend.spring.model.CategoryEntity;
 import kao.backend.spring.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,5 +19,5 @@ public class CategoryContoller {
     private CategoryRepository categoryRepository;
 
     @GetMapping("")
-    private List<CategoryEntity> getAll() { return categoryRepository.findAll(); }
+    private ResponseEntity<List<CategoryEntity>> getAll() { return ResponseEntity.ok(categoryRepository.findAll()); }
 }
