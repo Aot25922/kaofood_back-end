@@ -19,7 +19,7 @@ public class KaofoodBackEndApplication {
 //            @Override
 //            public void addCorsMappings(CorsRegistry registry) {
 //                registry.addMapping("/menu").allowedOrigins("http://localhost").allowedMethods("*").allowedHeaders("*");
-//                registry.addMapping("/user/login").allowedOrigins("http://localhost").allowedMethods("*").allowedHeaders("*").allowCredentials(true).exposedHeaders("JWT");
+//                registry.addMapping("/").allowedOrigins("http://localhost").allowedMethods("*").allowedHeaders("*").allowCredentials(true).exposedHeaders("JWT");
 //                registry.addMapping("/user/logout").allowedOrigins("http://localhost").allowedMethods("*").allowedHeaders("*").allowCredentials(true);
 //            }
 //        };

@@ -3,6 +3,7 @@ package kao.backend.spring.contoller;
 import kao.backend.spring.model.OrderDetailEntity;
 import kao.backend.spring.repository.OrderDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,5 +18,5 @@ public class OrderDetailContoller {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
     @GetMapping("")
-    private List<OrderDetailEntity> showAll() {return orderDetailRepository.findAll();}
+    private ResponseEntity<List<OrderDetailEntity>> showAll() {return ResponseEntity.ok(orderDetailRepository.findAll());}
 }

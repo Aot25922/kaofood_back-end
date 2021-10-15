@@ -3,6 +3,7 @@ package kao.backend.spring.contoller;
 import kao.backend.spring.model.StatusEntity;
 import kao.backend.spring.repository.StatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,5 +18,5 @@ public class StatusContoller {
     @Autowired
     private StatusRepository statusRepository;
     @GetMapping("")
-    private List<StatusEntity> showAll() {return statusRepository.findAll();}
+    private ResponseEntity<List<StatusEntity>> showAll() {return ResponseEntity.ok(statusRepository.findAll());}
 }

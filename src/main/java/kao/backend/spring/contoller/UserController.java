@@ -36,13 +36,8 @@ public class UserController {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @GetMapping("")
-    public List<UserEntity> getAll() {
-        return userRepository.findAll();
-    }
-
     @GetMapping("/login")
-    public ResponseEntity login(@RequestParam(value = "email", required = false) String email, @RequestParam(value = "password", required = false) String password, HttpSession session) throws Exception {
+    public ResponseEntity<UserEntity> login(@RequestParam(value = "email", required = false) String email, @RequestParam(value = "password", required = false) String password, HttpSession session) throws Exception {
         HttpHeaders responseHeaders = new HttpHeaders();
         if (email == null && password == null) {
             if (session == null) {
@@ -76,13 +71,13 @@ public class UserController {
     }
 
     @DeleteMapping("/logout")
-    public void logout(HttpSession session) {
-        System.out.println(session.getId());
+    public ResponseEntity<String> logout(HttpSession session) {
         session.invalidate();
+        return ResponseEntity.ok("Logout Successful!");
     }
 
     @PostMapping("/signup")
-    public ResponseEntity signup(@RequestParam String account,HttpServletRequest request) {
+    public ResponseEntity<String> signup(@RequestParam String account,HttpSession session) {
         HttpHeaders responseHeaders = new HttpHeaders();
         UserEntity newAccount = null;
         try {
@@ -104,7 +99,33 @@ public class UserController {
         ArrayList<String> sessionAccount = new ArrayList<>();
         sessionAccount.add(newAccount.getEmail());
         sessionAccount.add(newAccount.getPassword());
-        request.getSession().setAttribute("Account", sessionAccount);
+        session.setAttribute("Account", sessionAccount);
         return ResponseEntity.ok().headers(responseHeaders).body("success");
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<String> editUser(@RequestParam String account){
+        UserEntity editAccount = null;
+        try {
+            editAccount = objectMapper.readValue(account, UserEntity.class);
+        } catch (JsonProcessingException e) {
+            System.out.println(e.getStackTrace());
+            return ResponseEntity.internalServerError().body("Json Problem");
+        }
+        try{
+            UserEntity oldAccount = userRepository.findByEmailAndPassword(editAccount.getEmail(), editAccount.getPassword());
+            oldAccount.setEmail(editAccount.getEmail());
+            oldAccount.setPassword(editAccount.getPassword());
+            oldAccount.setAddress(editAccount.getAddress());
+            oldAccount.setPhone(editAccount.getPhone());
+            oldAccount.setFname(editAccount.getFname());
+            oldAccount.setLname(editAccount.getLname());
+            oldAccount.setOrderList(editAccount.getOrderList());
+            userRepository.save(oldAccount);
+        }catch (NullPointerException e){
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body("Cannot find menu to edit");
+        }
+        return ResponseEntity.ok("success");
     }
 }
