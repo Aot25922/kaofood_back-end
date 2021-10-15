@@ -1,7 +1,7 @@
-name: ci-cd
+name: CI/CD For Dev Branche
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,7 +18,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/int222-31-33-43/kaofood_back-end:latest
+          tags: ghcr.io/int222-31-33-43/kaofood_back-end:dev
   deploy:
     needs: build
     runs-on: ubuntu-latest
