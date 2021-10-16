@@ -27,25 +27,26 @@ public class AdminController {
         }
     }
 
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<String> editUser(@PathVariable int id, @RequestParam(value = "delete", required = false) Boolean delete, @RequestParam(value = "role", required = false) String role, HttpSession session) {
-        if (delete == null && role == null) {
-            return ResponseEntity.badRequest().body("No Edit Option");
-        }
+    @DeleteMapping ("/delete/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable int id,HttpSession session) {
         if(!(checkForAdmin(session))){
             return ResponseEntity.badRequest().body("You not admin");
         }
         UserEntity user = userRepository.findById(id);
-        if(delete!=null&&delete == true){
             userRepository.delete(user);
             return ResponseEntity.ok("Delete Account");
+    }
+
+    @PutMapping("/role/{id}")
+    public  ResponseEntity<String> editRole(@PathVariable int id,@RequestParam String role,HttpSession session){
+        System.out.println(role);
+        if(!(checkForAdmin(session))){
+            return ResponseEntity.badRequest().body("You not admin");
         }
-        if(role != null){
-            user.setRole(role);
-            userRepository.save(user);
-            return ResponseEntity.ok("Change Role");
-        }
-        return ResponseEntity.badRequest().body("No Edit Option");
+        UserEntity user = userRepository.findById(id);
+        user.setRole(role);
+        userRepository.save(user);
+        return ResponseEntity.ok("role change");
     }
 
     private Boolean checkForAdmin(HttpSession session) {
