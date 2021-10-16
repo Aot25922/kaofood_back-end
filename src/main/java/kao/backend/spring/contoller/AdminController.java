@@ -36,7 +36,7 @@ public class AdminController {
             return ResponseEntity.badRequest().body("You not admin");
         }
         UserEntity user = userRepository.findById(id);
-        if(delete == true){
+        if(delete!=null&&delete == true){
             userRepository.delete(user);
             return ResponseEntity.ok("Delete Account");
         }

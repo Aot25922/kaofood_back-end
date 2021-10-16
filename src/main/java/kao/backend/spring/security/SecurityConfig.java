@@ -23,12 +23,12 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private  myUserDetilsService myuserDetilsService ;
+    private MyUserDetailsService myuserDetailsService;
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(myuserDetilsService);
+        auth.userDetailsService(myuserDetailsService);
     }
 
     @Bean
