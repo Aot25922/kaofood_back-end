@@ -18,6 +18,15 @@ public class OrderEntity {
     @OneToMany(mappedBy = "orders")
     private List<OrderDetailEntity> orderDetail;
 
+    public OrderEntity() {
+    }
+
+    public OrderEntity(float totalPrice, UserEntity user, StatusEntity status) {
+        this.totalPrice = totalPrice;
+        this.user = user;
+        this.status = status;
+    }
+
     public int getId() {
         return id;
     }

@@ -2,7 +2,6 @@ package kao.backend.spring.contoller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kao.backend.spring.model.AuthenResponse;
 import kao.backend.spring.model.UserEntity;
 import kao.backend.spring.repository.UserRepository;
 import kao.backend.spring.security.JwtUtil;
@@ -14,9 +13,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,8 @@ public class UserController {
     private JwtUtil jwtUtil;
     @Autowired
     private ObjectMapper objectMapper;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @GetMapping("/login")
     public ResponseEntity<UserEntity> login(@RequestParam(value = "email", required = false) String email, @RequestParam(value = "password", required = false) String password, HttpSession session) throws Exception {
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -50,8 +50,12 @@ public class UserController {
             }
             final UserDetails userDetails = userDetailsService.loadUserByUsername(loginAccount.get(0));
             final String jwt = jwtUtil.generateToken(userDetails);
-            responseHeaders.set("JWT", new AuthenResponse(jwt).getJwt());
-            return ResponseEntity.ok().headers(responseHeaders).body(userRepository.findByEmailAndPassword(loginAccount.get(0), loginAccount.get(1)));
+            responseHeaders.set("JWT", jwt);
+            UserEntity getUser = userRepository.findByEmail(loginAccount.get(0));
+            if(passwordEncoder.matches(loginAccount.get(1),getUser.getPassword())) {
+                return ResponseEntity.ok().headers(responseHeaders).body(getUser);
+            }
+            return null;
         }
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
@@ -64,10 +68,13 @@ public class UserController {
         account.add(email);
         account.add(password);
         session.setAttribute("Account", account);
-        responseHeaders.set("JWT", new AuthenResponse(jwt).getJwt());
+        responseHeaders.set("JWT", jwt);
         System.out.println(session.getId());
-        return ResponseEntity.ok().headers(responseHeaders).body(userRepository.findByEmailAndPassword(email, password));
-
+        UserEntity getUser = userRepository.findByEmail(email);
+        if(passwordEncoder.matches(password,getUser.getPassword())) {
+            return ResponseEntity.ok().headers(responseHeaders).body(getUser);
+        }
+        return null;
     }
 
     @DeleteMapping("/logout")
@@ -92,10 +99,12 @@ public class UserController {
         if (userRepository.findByPhone(newAccount.getPhone()) != null) {
             return ResponseEntity.badRequest().body("accountPhoneExist");
         }
+        newAccount.setPassword(passwordEncoder.encode(newAccount.getPassword()));
+        System.out.println(passwordEncoder.encode(newAccount.getPassword()));
         userRepository.save(newAccount);
         final UserDetails userDetails = userDetailsService.loadUserByUsername(newAccount.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails);
-        responseHeaders.set("JWT", new AuthenResponse(jwt).getJwt());
+        responseHeaders.set("JWT", jwt);
         ArrayList<String> sessionAccount = new ArrayList<>();
         sessionAccount.add(newAccount.getEmail());
         sessionAccount.add(newAccount.getPassword());

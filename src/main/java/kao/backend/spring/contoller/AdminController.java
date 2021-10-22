@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -16,7 +15,10 @@ import java.util.Optional;
 public class AdminController {
     @Autowired
     UserRepository userRepository;
-    private List<String> loginAccount;
+    @Autowired
+    OrderContoller orderContoller;
+    @Autowired
+    OrderDetailContoller orderDetailContoller;
 
     @GetMapping("/allAccount")
     public ResponseEntity<List<UserEntity>> getAll(HttpSession session) {
@@ -38,8 +40,7 @@ public class AdminController {
     }
 
     @PutMapping("/role/{id}")
-    public  ResponseEntity<String> editRole(@PathVariable int id,@RequestParam String role,HttpSession session){
-        System.out.println(role);
+    public ResponseEntity<String> editRole(@PathVariable int id,@RequestParam String role,HttpSession session){
         if(!(checkForAdmin(session))){
             return ResponseEntity.badRequest().body("You not admin");
         }
@@ -48,9 +49,12 @@ public class AdminController {
         userRepository.save(user);
         return ResponseEntity.ok("role change");
     }
-
+//    @PutMapping("/edit/order")
+//    public ResponseEntity<String> editStatus(@PathVariable int orderId,@PathVariable String status){
+//
+//    }
     private Boolean checkForAdmin(HttpSession session) {
-        loginAccount = (List<String>) session.getAttribute("Account");
+        List<String> loginAccount = (List<String>) session.getAttribute("Account");
         if (loginAccount == null || loginAccount.isEmpty()) {
             return false;
         }

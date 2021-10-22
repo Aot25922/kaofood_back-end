@@ -15,6 +15,16 @@ public class OrderDetailEntity {
     private MenuEntity menu;
     private int count;
 
+    public OrderDetailEntity(OrderEntity orders, MenuEntity menu, int count) {
+        this.orders = orders;
+        this.menu = menu;
+        this.count = count;
+    }
+
+    public OrderDetailEntity() {
+
+    }
+
     public int getId() {
         return id;
     }
@@ -30,10 +40,6 @@ public class OrderDetailEntity {
     public void setCount(int count) {
         this.count = count;
     }
-
-//    public OrderEntity getOrders() {
-//        return orders;
-//    }
 
     public void setOrders(OrderEntity order) {
         this.orders = order;
