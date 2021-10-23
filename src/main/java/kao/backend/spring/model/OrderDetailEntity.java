@@ -45,6 +45,10 @@ public class OrderDetailEntity {
         this.orders = order;
     }
 
+    public OrderEntity getOrders() {
+        return orders;
+    }
+
     public MenuEntity getMenu() {
         return menu;
     }

@@ -18,5 +18,5 @@ public class StatusContoller {
     @Autowired
     private StatusRepository statusRepository;
     @GetMapping("")
-    private ResponseEntity<List<StatusEntity>> showAll() {return ResponseEntity.ok(statusRepository.findAll());}
+    private ResponseEntity<List<StatusEntity>> showAll() {return ResponseEntity.ok(statusRepository.findAllByOrderByIdAsc());}
 }

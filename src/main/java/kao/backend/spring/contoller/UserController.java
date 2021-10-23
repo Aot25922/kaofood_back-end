@@ -48,12 +48,12 @@ public class UserController {
             if (loginAccount == null || loginAccount.isEmpty()) {
                 return null;
             }
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(loginAccount.get(0));
-            final String jwt = jwtUtil.generateToken(userDetails);
-            responseHeaders.set("JWT", jwt);
-            UserEntity getUser = userRepository.findByEmail(loginAccount.get(0));
-            if(passwordEncoder.matches(loginAccount.get(1),getUser.getPassword())) {
-                return ResponseEntity.ok().headers(responseHeaders).body(getUser);
+//            final UserDetails userDetails = userDetailsService.loadUserByUsername(loginAccount.get(0));
+//            final String jwt = jwtUtil.generateToken(userDetails);
+//            responseHeaders.set("JWT", jwt);
+            UserEntity getUser = userRepository.findByEmailAndPassword(loginAccount.get(0),loginAccount.get(1));
+            if(getUser!=null) {
+                return ResponseEntity.ok().body(getUser);
             }
             return null;
         }
@@ -66,12 +66,12 @@ public class UserController {
         final String jwt = jwtUtil.generateToken(userDetails);
         ArrayList<String> account = new ArrayList<>();
         account.add(email);
-        account.add(password);
-        session.setAttribute("Account", account);
         responseHeaders.set("JWT", jwt);
         System.out.println(session.getId());
         UserEntity getUser = userRepository.findByEmail(email);
         if(passwordEncoder.matches(password,getUser.getPassword())) {
+            account.add(getUser.getPassword());
+            session.setAttribute("Account", account);
             return ResponseEntity.ok().headers(responseHeaders).body(getUser);
         }
         return null;

@@ -25,10 +25,6 @@ public class OrderContoller {
     private OrderDetailRepository orderDetailRepository;
     @Autowired
     private MenuRepository menuRepository;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @GetMapping("")
-    private ResponseEntity<List<OrderEntity>> showAll() {return ResponseEntity.ok(orderRepository.findAll());}
 
     @PostMapping(path="/new")
     private ResponseEntity<String> newOrder(@RequestParam int userId,@RequestBody List<menuRequest> menuList) throws JsonProcessingException {
