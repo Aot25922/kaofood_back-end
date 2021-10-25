@@ -100,7 +100,6 @@ public class UserController {
             return ResponseEntity.badRequest().body("accountPhoneExist");
         }
         newAccount.setPassword(passwordEncoder.encode(newAccount.getPassword()));
-        System.out.println(passwordEncoder.encode(newAccount.getPassword()));
         userRepository.save(newAccount);
         final UserDetails userDetails = userDetailsService.loadUserByUsername(newAccount.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails);
@@ -112,8 +111,8 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body("success");
     }
 
-    @PutMapping("/edit")
-    public ResponseEntity<String> editUser(@RequestParam String account){
+    @PutMapping("/edit/rofile")
+    public ResponseEntity<String> editUserProfile(@RequestParam String account,HttpSession session){
         UserEntity editAccount = null;
         try {
             editAccount = objectMapper.readValue(account, UserEntity.class);
@@ -122,15 +121,35 @@ public class UserController {
             return ResponseEntity.internalServerError().body("Json Problem");
         }
         try{
-            UserEntity oldAccount = userRepository.findByEmailAndPassword(editAccount.getEmail(), editAccount.getPassword());
+            List<String> loginAccount = (List<String>) session.getAttribute("Account");
+            if (loginAccount == null || loginAccount.isEmpty()) {
+                return null;
+            }
+            UserEntity oldAccount = userRepository.findByEmailAndPassword(loginAccount.get(0), loginAccount.get(1));
             oldAccount.setEmail(editAccount.getEmail());
-            oldAccount.setPassword(editAccount.getPassword());
             oldAccount.setAddress(editAccount.getAddress());
             oldAccount.setPhone(editAccount.getPhone());
             oldAccount.setFname(editAccount.getFname());
             oldAccount.setLname(editAccount.getLname());
-            oldAccount.setOrderList(editAccount.getOrderList());
             userRepository.save(oldAccount);
+        }catch (NullPointerException e){
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body("Cannot find menu to edit");
+        }
+        return ResponseEntity.ok("success");
+    }
+    @PutMapping("/edit/password")
+    public ResponseEntity<String> editUserPassword(String password,HttpSession session){
+        try{
+            List<String> loginAccount = (List<String>) session.getAttribute("Account");
+            if (loginAccount == null || loginAccount.isEmpty()) {
+                return null;
+            }
+            UserEntity account = userRepository.findByEmailAndPassword(loginAccount.get(0), loginAccount.get(1));
+            account.setPassword(passwordEncoder.encode(password));
+            userRepository.save(account);
+            loginAccount.set(1,passwordEncoder.encode(password) );
+            session.setAttribute("Account", loginAccount);
         }catch (NullPointerException e){
             System.out.println(e.getMessage());
             return ResponseEntity.internalServerError().body("Cannot find menu to edit");

@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @CrossOrigin
@@ -26,7 +27,11 @@ public class OrderContoller {
     @Autowired
     private MenuRepository menuRepository;
 
-    @PostMapping(path="/new")
+    @GetMapping("")
+    private ResponseEntity<List<OrderEntity>> showAll() {
+        return ResponseEntity.ok(orderRepository.findAll());
+    }
+    @PostMapping("/new")
     private ResponseEntity<String> newOrder(@RequestParam int userId,@RequestBody List<menuRequest> menuList) throws JsonProcessingException {
         UserEntity user = userRepository.findById(userId);
         int totalPrice = 0;

@@ -58,7 +58,7 @@ public class MenuContoller {
         MenuEntity newMenu = null;
         List<String> loginAccount = (List<String>) session.getAttribute("Account");
         UserEntity user = userRepository.findByEmailAndPassword(loginAccount.get(0), loginAccount.get(1));
-        if (user.getRole().equals("Member")) {
+        if (user.getRole().getName().equals("Member")) {
             return ResponseEntity.badRequest().body("You role is \"Member\"");
         }
         try {
@@ -103,7 +103,7 @@ public class MenuContoller {
         MenuEntity editMenu = null;
         List<String> loginAccount = (List<String>) session.getAttribute("Account");
         UserEntity user = userRepository.findByEmailAndPassword(loginAccount.get(0), loginAccount.get(1));
-        if (user.getRole().equals("Member")) {
+        if (user.getRole().getName().equals("Member")) {
             return ResponseEntity.badRequest().body("You role is \"Member\"");
         }
         try {
@@ -157,7 +157,7 @@ public class MenuContoller {
     public ResponseEntity<String> deleteMenu(@PathVariable int id, HttpSession session) {
         List<String> loginAccount = (List<String>) session.getAttribute("Account");
         UserEntity user = userRepository.findByEmailAndPassword(loginAccount.get(0), loginAccount.get(1));
-        if (user.getRole().equals("Member")) {
+        if (user.getRole().getName().equals("Member")) {
             return ResponseEntity.badRequest().body("You role is \"Member\"");
         }
         try {
