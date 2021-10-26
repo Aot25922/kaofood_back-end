@@ -17,16 +17,13 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.List;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/menu")
-public class MenuContoller {
+public class MenuController {
     @Autowired
     private MenuRepository menuRepository;
     @Autowired
@@ -34,11 +31,13 @@ public class MenuContoller {
     @Autowired
     UserRepository userRepository;
 
+    //Get all menu
     @GetMapping("")
     private ResponseEntity<List<MenuEntity>> getAll() {
         return ResponseEntity.ok().body(menuRepository.findAll());
     }
 
+    //Get menu image
     @GetMapping("/image/{image}")
     public ResponseEntity<String> getImageAsByteArray(HttpServletResponse response, @PathVariable String image) throws IOException {
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
@@ -64,17 +63,23 @@ public class MenuContoller {
         try {
             newMenu = objectMapper.readValue(menu, MenuEntity.class);
         } catch (JsonProcessingException e) {
-            System.out.println(e.getStackTrace());
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body("Cannot mapped JSON");
         }
         if (menuRepository.existsByNameIsLikeIgnoreCase(newMenu.getName())) {
             return ResponseEntity.badRequest().body("You menu is \"Already Exist! \"");
         }
         String type = ".png";
         try {
-            String oldname = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-            type = oldname.substring(oldname.lastIndexOf("."));
+            if(multipartFile == null){
+                return ResponseEntity.badRequest().body("No image");
+            }else {
+                String oldname = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                type = oldname.substring(oldname.lastIndexOf("."));
+            }
         } catch (Exception e) {
-            System.out.println(e.getStackTrace());
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body("Cannot get type from image");
         }
         String fileName = newMenu.getName() + type;
         String uploadDir = "./storage/menu/image/";
@@ -83,8 +88,9 @@ public class MenuContoller {
         if (!Files.exists(uploadPath)) {
             try {
                 Files.createDirectories(uploadPath);
-            } catch (Exception e) {
-                System.out.println(e.getStackTrace());
+            } catch (FileSystemException e) {
+                System.out.println(e.getMessage());
+                return  ResponseEntity.internalServerError().body("Cannot create directory");
             }
         }
         try (InputStream inputStream = multipartFile.getInputStream()) {
@@ -92,6 +98,7 @@ public class MenuContoller {
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ioe) {
             System.out.println(ioe.getMessage());
+            return ResponseEntity.internalServerError().body("IO Problem");
         }
         menuRepository.save(newMenu);
         return ResponseEntity.ok("success");
@@ -109,7 +116,7 @@ public class MenuContoller {
         try {
             editMenu = objectMapper.readValue(menu, MenuEntity.class);
         } catch (JsonProcessingException e) {
-            System.out.println(e.getStackTrace());
+            System.out.println(e.getMessage());
             return ResponseEntity.badRequest().body("This menu is \"Can't Convert to Entity\"");
         }
         try {
@@ -124,7 +131,8 @@ public class MenuContoller {
                     String oldname = StringUtils.cleanPath(multipartFile.getOriginalFilename());
                     type = oldname.substring(oldname.lastIndexOf("."));
                 } catch (Exception e) {
-                    System.out.println(e.getStackTrace());
+                    System.out.println(e.getMessage());
+                    return ResponseEntity.internalServerError().body("Multipart file error");
                 }
                 String fileName = Menu.getName() + type;
                 String uploadDir = "./storage/menu/image/";
@@ -133,8 +141,9 @@ public class MenuContoller {
                 if (!Files.exists(uploadPath)) {
                     try {
                         Files.createDirectories(uploadPath);
-                    } catch (Exception e) {
-                        System.out.println(e.getStackTrace());
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                        return ResponseEntity.internalServerError().body("IO Problem");
                     }
                 }
                 try (InputStream inputStream = multipartFile.getInputStream()) {
@@ -142,6 +151,7 @@ public class MenuContoller {
                     Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException ioe) {
                     System.out.println(ioe.getMessage());
+                    return ResponseEntity.internalServerError().body("IO Problem");
                 }
             }
             menuRepository.save(Menu);
@@ -169,11 +179,12 @@ public class MenuContoller {
                     Files.delete(oldImgPath);
                 } catch (IOException ioe) {
                     System.out.println(ioe.getMessage());
+                    return ResponseEntity.internalServerError().body("IO Problem");
                 }
             }
             menuRepository.deleteById(id);
         }catch (NullPointerException e){
-            System.out.println(e.getStackTrace());
+            System.out.println(e.getMessage());
             return ResponseEntity.badRequest().body("You menu is \"Not Found\"");
         }
         return ResponseEntity.ok("Success");

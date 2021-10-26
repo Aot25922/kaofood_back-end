@@ -3,15 +3,15 @@ package kao.backend.spring.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "orderDetail", schema = "kaofood", catalog = "")
+@Table(name = "orderDetail", schema = "kaofood")
 public class OrderDetailEntity {
     @Id
     private int id;
     @ManyToOne
-    @JoinColumn(name = "ordersId" ,nullable = false)
+    @JoinColumn(name = "ordersId", nullable = false)
     private OrderEntity orders;
     @ManyToOne
-    @JoinColumn(name = "menuId" ,nullable = false)
+    @JoinColumn(name = "menuId", nullable = false)
     private MenuEntity menu;
     private int count;
 
@@ -45,9 +45,7 @@ public class OrderDetailEntity {
         this.orders = order;
     }
 
-    public OrderEntity getOrders() {
-        return orders;
-    }
+    public OrderEntity getOrders() { return orders; }
 
     public MenuEntity getMenu() {
         return menu;

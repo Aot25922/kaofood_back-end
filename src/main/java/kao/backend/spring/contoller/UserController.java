@@ -3,6 +3,7 @@ package kao.backend.spring.contoller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kao.backend.spring.model.UserEntity;
+import kao.backend.spring.repository.RoleRepository;
 import kao.backend.spring.repository.UserRepository;
 import kao.backend.spring.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
     @Autowired
+    RoleRepository roleRepository;
+    @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserDetailsService userDetailsService;
@@ -44,13 +47,9 @@ public class UserController {
                 return null;
             }
             List<String> loginAccount = (List<String>) session.getAttribute("Account");
-            System.out.println(session.getId());
             if (loginAccount == null || loginAccount.isEmpty()) {
                 return null;
             }
-//            final UserDetails userDetails = userDetailsService.loadUserByUsername(loginAccount.get(0));
-//            final String jwt = jwtUtil.generateToken(userDetails);
-//            responseHeaders.set("JWT", jwt);
             UserEntity getUser = userRepository.findByEmailAndPassword(loginAccount.get(0),loginAccount.get(1));
             if(getUser!=null) {
                 return ResponseEntity.ok().body(getUser);
@@ -60,21 +59,21 @@ public class UserController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (BadCredentialsException e) {
-            throw new Exception("Error", e);
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body(null);
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         final String jwt = jwtUtil.generateToken(userDetails);
         ArrayList<String> account = new ArrayList<>();
         account.add(email);
         responseHeaders.set("JWT", jwt);
-        System.out.println(session.getId());
         UserEntity getUser = userRepository.findByEmail(email);
         if(passwordEncoder.matches(password,getUser.getPassword())) {
             account.add(getUser.getPassword());
             session.setAttribute("Account", account);
             return ResponseEntity.ok().headers(responseHeaders).body(getUser);
         }
-        return null;
+        return ResponseEntity.internalServerError().body(null);
     }
 
     @DeleteMapping("/logout")
@@ -90,7 +89,8 @@ public class UserController {
         try {
             newAccount = objectMapper.readValue(account, UserEntity.class);
         } catch (JsonProcessingException e) {
-            System.out.println(e.getStackTrace());
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().body("Cannot Convert To Entity");
         }
         System.out.println(newAccount.getEmail());
         if (userRepository.findByEmail(newAccount.getEmail()) != null) {
@@ -100,6 +100,7 @@ public class UserController {
             return ResponseEntity.badRequest().body("accountPhoneExist");
         }
         newAccount.setPassword(passwordEncoder.encode(newAccount.getPassword()));
+        newAccount.setRole(roleRepository.findById(3));
         userRepository.save(newAccount);
         final UserDetails userDetails = userDetailsService.loadUserByUsername(newAccount.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails);
@@ -111,13 +112,13 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body("success");
     }
 
-    @PutMapping("/edit/rofile")
+    @PutMapping("/edit/profile")
     public ResponseEntity<String> editUserProfile(@RequestParam String account,HttpSession session){
         UserEntity editAccount = null;
         try {
             editAccount = objectMapper.readValue(account, UserEntity.class);
         } catch (JsonProcessingException e) {
-            System.out.println(e.getStackTrace());
+            System.out.println(e.getMessage());
             return ResponseEntity.internalServerError().body("Json Problem");
         }
         try{
@@ -131,6 +132,13 @@ public class UserController {
             oldAccount.setPhone(editAccount.getPhone());
             oldAccount.setFname(editAccount.getFname());
             oldAccount.setLname(editAccount.getLname());
+            if(!(editAccount.getPassword().equals(""))){
+                oldAccount.setPassword(passwordEncoder.encode(editAccount.getPassword()));
+                ArrayList<String> sessionAccount = new ArrayList<>();
+                sessionAccount.add(oldAccount.getEmail());
+                sessionAccount.add(oldAccount.getPassword());
+                session.setAttribute("Account", sessionAccount);
+            }
             userRepository.save(oldAccount);
         }catch (NullPointerException e){
             System.out.println(e.getMessage());

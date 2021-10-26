@@ -27,6 +27,7 @@ public class AdminController {
     @Autowired
     RoleRepository roleRepository;
 
+    //Get all user account.
     @GetMapping("/allAccount")
     public ResponseEntity<List<UserEntity>> getAll(HttpSession session) {
         if (checkForAdmin(session)) {
@@ -36,6 +37,7 @@ public class AdminController {
         }
     }
 
+   //Delete user account
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable int id, HttpSession session) {
         if (!(checkForAdmin(session))) {
@@ -46,7 +48,8 @@ public class AdminController {
         return ResponseEntity.ok("Delete Account");
     }
 
-    @PutMapping("/role/{id}")
+    //Edit role of user account
+    @PutMapping("/edit/role/{id}")
     public ResponseEntity<String> editRole(@PathVariable int id, @RequestParam int roleId, HttpSession session) {
         if (!(checkForAdmin(session))) {
             return ResponseEntity.badRequest().body("You not admin");
@@ -58,6 +61,7 @@ public class AdminController {
         return ResponseEntity.ok("role change");
     }
 
+    //Edit order status
     @PutMapping("/edit/order")
     public ResponseEntity<String> editStatus(@RequestParam int orderId, @RequestParam int statusId,HttpSession session) {
         if (!(checkForAdmin(session))) {
@@ -72,8 +76,8 @@ public class AdminController {
             return ResponseEntity.ok("Success");
         } catch (NullPointerException e) {
             System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body("Cannot find order or status");
         }
-        return ResponseEntity.badRequest().body("Not Found");
     }
 
     private Boolean checkForAdmin(HttpSession session) {

@@ -15,7 +15,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/order")
-public class OrderContoller {
+public class OrderController {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
@@ -49,18 +49,11 @@ public class OrderContoller {
             newOrder.setTotalPrice(totalPrice);
             orderRepository.save(newOrder);
         }catch (NullPointerException e){
-            System.out.println(e.getStackTrace());
+            System.out.println(e.getMessage());
         }
             return ResponseEntity.ok().body("Success");
 
     }
-
-//    @GetMapping("/test")
-//    public void test(@RequestBody menuRequest[] menuList){
-//        for(menuRequest i : menuList){
-//            System.out.println(i.getMenuId());
-//        }
-//    }
 
 
 }
