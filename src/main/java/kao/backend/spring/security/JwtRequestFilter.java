@@ -1,5 +1,6 @@
 package kao.backend.spring.security;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +25,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtil jwtUtil;
 
+    //Filter request for JWT token
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
          final String authorizationHeader = request.getHeader("Authorization");
@@ -40,13 +42,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
              List<String> loginAccount = (List<String>) request.getSession().getAttribute("Account");
              System.out.println(loginAccount.get(0));
              UserDetails validateUser = this.myUserDetailsService.loadUserByUsername(loginAccount.get(0));
-             if(jwtUtil.validateToken(jwt, userDetails)&&userDetails.equals(validateUser)) {
-                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                 userDetails, null,userDetails.getAuthorities());
-                 usernamePasswordAuthenticationToken.setDetails(
-                         new WebAuthenticationDetailsSource().buildDetails(request)
-                 );
-                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+             try {
+                 if (jwtUtil.validateToken(jwt, userDetails) && userDetails.equals(validateUser)) {
+                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                             userDetails, null, userDetails.getAuthorities());
+                     usernamePasswordAuthenticationToken.setDetails(
+                             new WebAuthenticationDetailsSource().buildDetails(request)
+                     );
+                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                 }
+             }catch (ExpiredJwtException e){
+                 System.out.println("erf");
              }
          }
          chain.doFilter(request, response);

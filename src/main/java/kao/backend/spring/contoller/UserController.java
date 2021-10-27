@@ -39,6 +39,8 @@ public class UserController {
     private ObjectMapper objectMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    //User Login
     @GetMapping("/login")
     public ResponseEntity<UserEntity> login(@RequestParam(value = "email", required = false) String email, @RequestParam(value = "password", required = false) String password, HttpSession session) throws Exception {
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -76,12 +78,14 @@ public class UserController {
         return ResponseEntity.internalServerError().body(null);
     }
 
+    //User Logout
     @DeleteMapping("/logout")
     public ResponseEntity<String> logout(HttpSession session) {
         session.invalidate();
         return ResponseEntity.ok("Logout Successful!");
     }
 
+    //User Signup
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestParam String account,HttpSession session) {
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -112,6 +116,7 @@ public class UserController {
         return ResponseEntity.ok().headers(responseHeaders).body("success");
     }
 
+    //Edit user detail
     @PutMapping("/edit/profile")
     public ResponseEntity<String> editUserProfile(@RequestParam String account,HttpSession session){
         UserEntity editAccount = null;
@@ -146,6 +151,8 @@ public class UserController {
         }
         return ResponseEntity.ok("success");
     }
+
+    //Edit user password
     @PutMapping("/edit/password")
     public ResponseEntity<String> editUserPassword(String password,HttpSession session){
         try{

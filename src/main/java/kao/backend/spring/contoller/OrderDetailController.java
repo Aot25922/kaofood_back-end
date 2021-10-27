@@ -14,7 +14,8 @@ import java.util.List;
 public class OrderDetailController {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
-    @Autowired
+
+    //Get all orderDetail
     @GetMapping("")
     private ResponseEntity<List<OrderDetailEntity>> showAll() {return ResponseEntity.ok(orderDetailRepository.findAll());}
 }

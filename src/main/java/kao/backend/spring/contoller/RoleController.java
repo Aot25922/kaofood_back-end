@@ -17,6 +17,8 @@ import java.util.List;
 public class RoleController {
     @Autowired
     RoleRepository roleRepository;
+
+    //Get all role
     @GetMapping("")
     public ResponseEntity<List<RoleEntity>> getAllrole(){
         return ResponseEntity.ok(roleRepository.findAll());

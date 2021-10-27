@@ -17,6 +17,8 @@ import java.util.List;
 public class StatusController {
     @Autowired
     private StatusRepository statusRepository;
+
+    //Get all status
     @GetMapping("")
     private ResponseEntity<List<StatusEntity>> showAll() {return ResponseEntity.ok(statusRepository.findAllByOrderByIdAsc());}
 }

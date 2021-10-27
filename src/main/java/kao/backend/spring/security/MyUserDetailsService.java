@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+//Load user from database
 @Service
 public class MyUserDetailsService implements UserDetailsService {
     @Autowired

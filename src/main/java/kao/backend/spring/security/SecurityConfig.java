@@ -27,16 +27,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private MyUserDetailsService myuserDetailsService;
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
+    //config authen
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myuserDetailsService);
     }
 
+    //Encode password
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
 
+    //Config CORS and Allow Request Mapping
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
@@ -52,10 +55,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    //CORS Config
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost","https://kaofood.works"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost","https://dev.kaofood.works/api"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setExposedHeaders(Arrays.asList("Authorization", "content-type","JWT"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "content-type"));
@@ -65,6 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return source;
     }
 
+    //Firewall Config
     @Bean
     public HttpFirewall allowHttpFirewall() {
         StrictHttpFirewall firewall = new StrictHttpFirewall();

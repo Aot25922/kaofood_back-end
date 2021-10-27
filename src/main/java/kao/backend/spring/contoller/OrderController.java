@@ -27,10 +27,13 @@ public class OrderController {
     @Autowired
     private MenuRepository menuRepository;
 
+    //Get all order
     @GetMapping("")
     private ResponseEntity<List<OrderEntity>> showAll() {
         return ResponseEntity.ok(orderRepository.findAll());
     }
+
+    //Create new order
     @PostMapping("/new")
     private ResponseEntity<String> newOrder(@RequestParam int userId,@RequestBody List<menuRequest> menuList) throws JsonProcessingException {
         UserEntity user = userRepository.findById(userId);

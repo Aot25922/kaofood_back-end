@@ -80,6 +80,7 @@ public class AdminController {
         }
     }
 
+    //Check for Admin role
     private Boolean checkForAdmin(HttpSession session) {
         List<String> loginAccount = (List<String>) session.getAttribute("Account");
         if (loginAccount == null || loginAccount.isEmpty()) {
