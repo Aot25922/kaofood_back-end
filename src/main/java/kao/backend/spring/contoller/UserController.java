@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class UserController {
 
     //User Login
     @GetMapping("/login")
-    public ResponseEntity<UserEntity> login(@RequestParam(value = "email", required = false) String email, @RequestParam(value = "password", required = false) String password, HttpSession session) throws Exception {
+    public ResponseEntity<UserEntity> login(@RequestParam(value = "email", required = false) String email, @RequestParam(value = "password", required = false) String password, HttpServletRequest request,HttpSession session) throws Exception {
         HttpHeaders responseHeaders = new HttpHeaders();
         if (email == null && password == null) {
             if (session == null) {
@@ -72,7 +73,7 @@ public class UserController {
         UserEntity getUser = userRepository.findByEmail(email);
         if(passwordEncoder.matches(password,getUser.getPassword())) {
             account.add(getUser.getPassword());
-            session.setAttribute("Account", account);
+            request.getSession().setAttribute("Account", account);
             return ResponseEntity.ok().headers(responseHeaders).body(getUser);
         }
         return ResponseEntity.internalServerError().body(null);
