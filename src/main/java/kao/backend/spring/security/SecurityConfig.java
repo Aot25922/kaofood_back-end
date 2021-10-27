@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and()
                 .authorizeRequests().antMatchers("/user/login","/menu","/menu/image/*","/category","/user/signup").permitAll()
                 .anyRequest().authenticated()
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
         http.csrf().disable();
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
@@ -67,22 +67,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowedOrigins(Arrays.asList("http://localhost","https://kaofood.works"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setExposedHeaders(Arrays.asList("Authorization", "content-type","JWT"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "content-type","Origin","X-Requested-With","Accept"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "content-type"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
-    @Bean
-    public ServletContextInitializer servletContextInitializer(@Value("${secure.cookie}") boolean secure) {
-        return new ServletContextInitializer() {
-            @Override
-            public void onStartup(ServletContext servletContext) throws ServletException {
-                servletContext.getSessionCookieConfig().setSecure(secure);
-            }
-        };
-    }
+//    @Bean
+//    public ServletContextInitializer servletContextInitializer(@Value("${secure.cookie}") boolean secure) {
+//        return new ServletContextInitializer() {
+//            @Override
+//            public void onStartup(ServletContext servletContext) throws ServletException {
+//                servletContext.getSessionCookieConfig().setSecure(secure);
+//            }
+//        };
+//    }
     //Firewall Config
 //    @Bean
 //    public HttpFirewall allowHttpFirewall() {
