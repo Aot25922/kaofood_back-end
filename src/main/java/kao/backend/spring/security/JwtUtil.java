@@ -16,15 +16,15 @@ import java.util.Map;
 import java.util.function.Function;
 
 //Generate and validate token
-@Service
+@Component
 public class JwtUtil {
     private static final long serialVersionUID = -2550185165626007488L;
 
-//    @Value("${jwt.expireDate}")
-    private static  final long JWT_TOKEN_VALIDITY=2*60*60;
+    @Value("${jwt.expireDate}")
+    private long JWT_TOKEN_VALIDITY;
 
-//    @Value("${jwt.secret}")
-    private static final String secret = "MY_SECRET";
+    @Value("${jwt.secret}")
+    private String secret ;
 
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
