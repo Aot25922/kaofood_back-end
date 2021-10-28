@@ -64,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost","https://kaofood.works"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost","https://kaofood.works","https://dev.kaofood.works"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setExposedHeaders(Arrays.asList("Authorization", "content-type","JWT"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "content-type"));

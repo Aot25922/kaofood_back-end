@@ -40,7 +40,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
          if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
              UserDetails userDetails = this.myUserDetailsService.loadUserByUsername(email);
              List<String> loginAccount = (List<String>) request.getSession().getAttribute("Account");
-             System.out.println(loginAccount.get(0));
              UserDetails validateUser = this.myUserDetailsService.loadUserByUsername(loginAccount.get(0));
              try {
                  if (jwtUtil.validateToken(jwt, userDetails) && userDetails.equals(validateUser)) {
