@@ -12,17 +12,4 @@ public class KaofoodBackEndApplication {
     public static void main(String[] args) {
         SpringApplication.run(KaofoodBackEndApplication.class, args);
     }
-
-//    @Bean
-//    public WebMvcConfigurer corsConfigurer() {
-//        return new WebMvcConfigurer() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/menu").allowedOrigins("http://localhost").allowedMethods("*").allowedHeaders("*");
-//                registry.addMapping("/").allowedOrigins("http://localhost").allowedMethods("*").allowedHeaders("*").allowCredentials(true).exposedHeaders("JWT");
-//                registry.addMapping("/user/logout").allowedOrigins("http://localhost").allowedMethods("*").allowedHeaders("*").allowCredentials(true);
-//            }
-//        };
-//
-//    }
 }

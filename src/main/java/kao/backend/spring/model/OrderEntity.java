@@ -18,6 +18,15 @@ public class OrderEntity {
     @OneToMany(mappedBy = "orders")
     private List<OrderDetailEntity> orderDetail;
 
+    public OrderEntity() {
+    }
+
+    public OrderEntity(float totalPrice, UserEntity user, StatusEntity status) {
+        this.totalPrice = totalPrice;
+        this.user = user;
+        this.status = status;
+    }
+
     public int getId() {
         return id;
     }
@@ -34,10 +43,6 @@ public class OrderEntity {
         this.totalPrice = totalPrice;
     }
 
-//    public UserEntity getUser() {
-//        return user;
-//    }
-
     public void setUser(UserEntity user) {
         this.user = user;
     }
@@ -50,31 +55,8 @@ public class OrderEntity {
         this.status = status;
     }
 
-//    public List<OrderDetailEntity> getOrderDetail() {
-//        return orderDetail;
-//    }
-
     public void setOrderDetail(List<OrderDetailEntity> orderDetail) {
         this.orderDetail = orderDetail;
     }
 
-    //    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//
-//        OrderEntity that = (OrderEntity) o;
-//
-//        if (orderId != that.orderId) return false;
-//        if (totalPrice != null ? !totalPrice.equals(that.totalPrice) : that.totalPrice != null) return false;
-//
-//        return true;
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        int result = orderId;
-//        result = 31 * result + (totalPrice != null ? totalPrice.hashCode() : 0);
-//        return result;
-//    }
 }

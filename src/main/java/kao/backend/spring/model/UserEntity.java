@@ -15,9 +15,21 @@ public class UserEntity implements Serializable {
     private String lname;
     private String phone;
     private String address;
-    private String role;
+
     @OneToMany(mappedBy = "user")
     private List<OrderEntity> orderList;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "roleId", nullable = false)
+    private RoleEntity role;
+
+    public RoleEntity getRole() {
+        return role;
+    }
+
+    public void setRole(RoleEntity roleId) {
+        this.role = roleId;
+    }
 
     public int getId() {
         return id;
@@ -75,13 +87,6 @@ public class UserEntity implements Serializable {
         this.address = address;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 
     public List<OrderEntity> getOrderList() {
         return orderList;

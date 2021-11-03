@@ -1,5 +1,6 @@
 package kao.backend.spring.security;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,16 +14,18 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
-    private myUserDetilsService myUserDetilsService;
+    private MyUserDetailsService myUserDetailsService;
 
     @Autowired
     private JwtUtil jwtUtil;
 
+    //Filter request for JWT token
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
          final String authorizationHeader = request.getHeader("Authorization");
@@ -35,14 +38,20 @@ public class JwtRequestFilter extends OncePerRequestFilter {
          }
 
          if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
-             UserDetails userDetails = this.myUserDetilsService.loadUserByUsername(email);
-             if(jwtUtil.validateToken(jwt, userDetails)) {
-                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                 userDetails, null,userDetails.getAuthorities());
-                 usernamePasswordAuthenticationToken.setDetails(
-                         new WebAuthenticationDetailsSource().buildDetails(request)
-                 );
-                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+             UserDetails userDetails = this.myUserDetailsService.loadUserByUsername(email);
+             List<String> loginAccount = (List<String>) request.getSession().getAttribute("Account");
+             UserDetails validateUser = this.myUserDetailsService.loadUserByUsername(loginAccount.get(0));
+             try {
+                 if (jwtUtil.validateToken(jwt, userDetails) && userDetails.equals(validateUser)) {
+                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                             userDetails, null, userDetails.getAuthorities());
+                     usernamePasswordAuthenticationToken.setDetails(
+                             new WebAuthenticationDetailsSource().buildDetails(request)
+                     );
+                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                 }
+             }catch (ExpiredJwtException e){
+                 System.out.println("erf");
              }
          }
          chain.doFilter(request, response);

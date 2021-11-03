@@ -1,7 +1,7 @@
 package kao.backend.spring.contoller;
 
-import kao.backend.spring.model.CategoryEntity;
-import kao.backend.spring.repository.CategoryRepository;
+import kao.backend.spring.model.RoleEntity;
+import kao.backend.spring.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,11 +13,14 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/category")
-public class CategoryContoller {
+@RequestMapping("/role")
+public class RoleController {
     @Autowired
-    private CategoryRepository categoryRepository;
+    RoleRepository roleRepository;
 
+    //Get all role
     @GetMapping("")
-    private ResponseEntity<List<CategoryEntity>> getAll() { return ResponseEntity.ok(categoryRepository.findAll()); }
+    public ResponseEntity<List<RoleEntity>> getAllrole(){
+        return ResponseEntity.ok(roleRepository.findAll());
+    }
 }

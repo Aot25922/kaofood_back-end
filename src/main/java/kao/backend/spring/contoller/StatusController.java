@@ -1,7 +1,7 @@
 package kao.backend.spring.contoller;
 
-import kao.backend.spring.model.OrderEntity;
-import kao.backend.spring.repository.OrderRepository;
+import kao.backend.spring.model.StatusEntity;
+import kao.backend.spring.repository.StatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,11 +13,12 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/order")
-public class OrderContoller {
+@RequestMapping("/status")
+public class StatusController {
     @Autowired
-    private OrderRepository orderRepository;
-    @GetMapping("")
-    private ResponseEntity<List<OrderEntity>> showAll() {return ResponseEntity.ok(orderRepository.findAll());}
+    private StatusRepository statusRepository;
 
+    //Get all status
+    @GetMapping("")
+    private ResponseEntity<List<StatusEntity>> showAll() {return ResponseEntity.ok(statusRepository.findAllByOrderByIdAsc());}
 }
