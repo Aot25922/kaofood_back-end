@@ -44,8 +44,8 @@ public class OrderDetailEntity {
     public void setOrders(OrderEntity order) {
         this.orders = order;
     }
-
-    public OrderEntity getOrders() { return orders; }
+//
+//    public OrderEntity getOrders() { return orders; }
 
     public MenuEntity getMenu() {
         return menu;
