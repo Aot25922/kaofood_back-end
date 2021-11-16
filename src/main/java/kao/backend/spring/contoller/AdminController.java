@@ -64,8 +64,18 @@ public class AdminController {
     //Edit order status
     @PutMapping("/edit/order")
     public ResponseEntity<String> editStatus(@RequestParam int orderId, @RequestParam int statusId,HttpSession session) {
-        if (!(checkForAdmin(session))) {
-            return ResponseEntity.badRequest().body("You not admin");
+        List<String> loginAccount = (List<String>) session.getAttribute("Account");
+        if (loginAccount == null || loginAccount.isEmpty()) {
+            return ResponseEntity.badRequest().body("Account null");
+        }
+        try {
+            UserEntity account = userRepository.findByEmailAndPassword(loginAccount.get(0), loginAccount.get(1));
+            if (account.getRole().getName().equals("Member")) {
+                return ResponseEntity.badRequest().body("Account is Member");
+            }
+        } catch (NullPointerException e) {
+            System.out.println(e.getMessage());
+            return  ResponseEntity.badRequest().body("null");
         }
         try {
             OrderEntity order = orderRepository.findById(orderId);

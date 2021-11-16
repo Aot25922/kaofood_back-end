@@ -121,7 +121,12 @@ public class MenuController {
         }
         try {
             MenuEntity Menu = menuRepository.getById(editMenu.getId());
-            Menu.setName(editMenu.getName());
+            if(!(Menu.getName().equals(editMenu.getName()))){
+                if(menuRepository.existsByNameIsLikeIgnoreCase(editMenu.getName())){
+                    return ResponseEntity.badRequest().body("You menu is \"Already Exist! \"");
+                }
+                Menu.setName(editMenu.getName());
+            }
             Menu.setPrice(editMenu.getPrice());
             Menu.setDescription(editMenu.getDescription());
             Menu.setCategory(editMenu.getCategory());
