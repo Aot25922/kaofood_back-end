@@ -47,6 +47,8 @@ public class OrderDetailEntity {
 //
 //    public OrderEntity getOrders() { return orders; }
 
+    public OrderEntity getOrders() { return orders; }
+
     public MenuEntity getMenu() {
         return menu;
     }

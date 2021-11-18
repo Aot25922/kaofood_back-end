@@ -22,7 +22,5 @@ public class MyUserDetailsService implements UserDetailsService {
         UserEntity account = userRepository.findByEmail(email);
         return new User(account.getEmail(), account.getPassword(), new ArrayList<>()) {
         };
-
-
     }
 }
