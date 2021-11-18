@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @CrossOrigin
@@ -58,7 +59,15 @@ public class OrderController {
 
     }
 
-
-
+    @GetMapping("/user/{userId}")
+    private ResponseEntity<List<OrderEntity>> userOrder(@PathVariable("userId") int userId, HttpSession session){
+        List<String> loginAccount = (List<String>) session.getAttribute("Account");
+        UserEntity user = userRepository.findByEmailAndPassword(loginAccount.get(0), loginAccount.get(1));
+        if (user.getId() != userId) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        List<OrderEntity> orderUser = orderRepository.findAllByUser_Id(userId);
+        return ResponseEntity.ok(orderUser);
+    }
 
 }

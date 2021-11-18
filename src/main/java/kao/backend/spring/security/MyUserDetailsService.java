@@ -16,12 +16,11 @@ import java.util.ArrayList;
 public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity account = userRepository.findByEmail(email);
         return new User(account.getEmail(), account.getPassword(), new ArrayList<>()) {
         };
     }
-
-
 }

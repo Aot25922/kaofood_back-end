@@ -66,6 +66,7 @@ public class UserController {
             return ResponseEntity.internalServerError().body(null);
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        System.out.println("Test");
         final String jwt = jwtUtil.generateToken(userDetails);
         ArrayList<String> account = new ArrayList<>();
         account.add(email);

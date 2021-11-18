@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "orders", schema = "kaofood", catalog = "")
+@Table(name = "orders", schema = "kaofood")
 public class OrderEntity {
     @Id
     private int id;
@@ -59,4 +59,7 @@ public class OrderEntity {
         this.orderDetail = orderDetail;
     }
 
+    public List<OrderDetailEntity> getOrderDetail() {
+        return orderDetail;
+    }
 }
