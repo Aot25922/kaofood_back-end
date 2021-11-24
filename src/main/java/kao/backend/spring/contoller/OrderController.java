@@ -35,8 +35,8 @@ public class OrderController {
     }
 
     //Create new order
-    @PostMapping("/new")
-    private ResponseEntity<String> newOrder(@RequestParam int userId,@RequestBody List<menuRequest> menuList) throws JsonProcessingException {
+    @PostMapping("/new/{userId}")
+    private ResponseEntity<String> newOrder(@PathVariable("userId") int userId,@RequestBody List<menuRequest> menuList) throws JsonProcessingException {
         UserEntity user = userRepository.findById(userId);
         int totalPrice = 0;
         try {

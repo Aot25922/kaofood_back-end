@@ -42,14 +42,14 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     //User Login
-    @GetMapping("/login")
-    public ResponseEntity<UserEntity> login(@RequestParam(value = "email", required = false) String email, @RequestParam(value = "password", required = false) String password,HttpSession session) throws Exception {
+    @PostMapping("/login")
+    public ResponseEntity<UserEntity> login(@RequestParam(required = false) String email, @RequestParam(required = false) String password,HttpSession session) throws Exception {
         HttpHeaders responseHeaders = new HttpHeaders();
         if (email == null && password == null) {
             if (session == null) {
                 return null;
             }
-            List<String> loginAccount = (List<String>) session.getAttribute("Account");
+            ArrayList<String> loginAccount = (ArrayList<String>) session.getAttribute("Account");
             if (loginAccount == null || loginAccount.isEmpty()) {
                 return null;
             }
@@ -75,6 +75,7 @@ public class UserController {
         if(passwordEncoder.matches(password,getUser.getPassword())) {
             account.add(getUser.getPassword());
             session.setAttribute("Account", account);
+            System.out.println(session.getAttribute("Account"));
             return ResponseEntity.ok().headers(responseHeaders).body(getUser);
         }
         return ResponseEntity.internalServerError().body(null);
