@@ -1,15 +1,13 @@
 package kao.backend.spring.contoller;
 
-import kao.backend.spring.model.OrderEntity;
-import kao.backend.spring.model.RoleEntity;
-import kao.backend.spring.model.StatusEntity;
-import kao.backend.spring.model.UserEntity;
+import kao.backend.spring.model.*;
 import kao.backend.spring.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Collections;
 import java.util.List;
 
 @CrossOrigin
@@ -37,14 +35,21 @@ public class AdminController {
         }
     }
 
-   //Delete user account
+    //Delete user account
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable int id, HttpSession session) {
+        UserEntity user;
         if (!(checkForAdmin(session))) {
             return ResponseEntity.badRequest().body("You not admin");
         }
-        UserEntity user = userRepository.findById(id);
-        userRepository.delete(user);
+        try {
+            orderDetailRepository.deleteAllByUser_Id(id);
+            orderRepository.deleteByUser_Id(id);
+            userRepository.deleteById(id);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body("Cannot find user");
+        }
         return ResponseEntity.ok("Delete Account");
     }
 
@@ -54,16 +59,20 @@ public class AdminController {
         if (!(checkForAdmin(session))) {
             return ResponseEntity.badRequest().body("You not admin");
         }
-        UserEntity user = userRepository.findById(id);
-        RoleEntity role = roleRepository.findById(roleId);
-        user.setRole(role);
-        userRepository.save(user);
+        try {
+            UserEntity user = userRepository.findById(id);
+            RoleEntity role = roleRepository.findById(roleId);
+            user.setRole(role);
+            userRepository.save(user);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Cannot Edit");
+        }
         return ResponseEntity.ok("role change");
     }
 
     //Edit order status
     @PutMapping("/edit/order")
-    public ResponseEntity<String> editStatus(@RequestParam int orderId, @RequestParam int statusId,HttpSession session) {
+    public ResponseEntity<String> editStatus(@RequestParam int orderId, @RequestParam int statusId, HttpSession session) {
         List<String> loginAccount = (List<String>) session.getAttribute("Account");
         if (loginAccount == null || loginAccount.isEmpty()) {
             return ResponseEntity.badRequest().body("Account null");
@@ -75,7 +84,7 @@ public class AdminController {
             }
         } catch (NullPointerException e) {
             System.out.println(e.getMessage());
-            return  ResponseEntity.badRequest().body("null");
+            return ResponseEntity.badRequest().body("null");
         }
         try {
             OrderEntity order = orderRepository.findById(orderId);
