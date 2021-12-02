@@ -44,7 +44,7 @@ public class OrderController {
             if(orderRepository.findAll().size() == 0){
                 newOrder.setId(0);
             }else {
-                newOrder.setId(orderRepository.findAll().get(orderRepository.findAll().size() - 1).getId() + 1);
+                newOrder.setId(orderRepository.findTopByOrderByIdDesc().getId()+1);
             }
             orderRepository.save(newOrder);
             for(menuRequest i : menuList){
@@ -53,7 +53,7 @@ public class OrderController {
                 if(orderDetailRepository.findAll().size()==0){
                     newOrderDetail.setId(0);
                 }else {
-                    newOrderDetail.setId(orderDetailRepository.findAll().get(orderDetailRepository.findAll().size() - 1).getId() + 1);
+                    newOrderDetail.setId(orderDetailRepository.findTopByOrderByIdDesc().getId()+1);
                 }
                 totalPrice += userMenu.getPrice()*newOrderDetail.getCount();
                 orderDetailRepository.save(newOrderDetail);
