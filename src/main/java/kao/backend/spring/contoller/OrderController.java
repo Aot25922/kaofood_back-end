@@ -41,12 +41,20 @@ public class OrderController {
         int totalPrice = 0;
         try {
             OrderEntity newOrder = new OrderEntity(totalPrice, user, statusRepository.getById(1));
-            newOrder.setId(orderRepository.findAll().get(orderRepository.findAll().size()-1).getId()+1);
+            if(orderRepository.findAll().size() == 0){
+                newOrder.setId(0);
+            }else {
+                newOrder.setId(orderRepository.findAll().get(orderRepository.findAll().size() - 1).getId() + 1);
+            }
             orderRepository.save(newOrder);
             for(menuRequest i : menuList){
                 MenuEntity userMenu = menuRepository.findById(i.getMenuId());
                 OrderDetailEntity newOrderDetail = new OrderDetailEntity(newOrder,userMenu,i.getCount() );
-                newOrderDetail.setId(orderDetailRepository.findAll().get(orderDetailRepository.findAll().size()-1).getId()+1);
+                if(orderDetailRepository.findAll().size()==0){
+                    newOrderDetail.setId(0);
+                }else {
+                    newOrderDetail.setId(orderDetailRepository.findAll().get(orderDetailRepository.findAll().size() - 1).getId() + 1);
+                }
                 totalPrice += userMenu.getPrice()*newOrderDetail.getCount();
                 orderDetailRepository.save(newOrderDetail);
             }
