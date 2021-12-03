@@ -19,4 +19,6 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetailEntity ,
     @Modifying
     @Query("delete from OrderDetailEntity od where od.orders.id IN (select o.id from OrderEntity o where o.user.id = ?1)")
     void deleteAllByUser_Id(int id);
+
+    OrderDetailEntity findTopByOrderByIdDesc();
 }
